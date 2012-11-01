@@ -46,6 +46,7 @@ import Data.Binary
 import Data.Binary.Put
 import Data.Binary.Get
 import qualified Data.ByteString.Lazy as Lazy
+import qualified Data.Serialize as S
 
 import Data.UUID.Builder
 
@@ -300,6 +301,12 @@ instance Binary UUID where
     put (UUID w0 w1 w2 w3) =
         putWord32be w0 >> putWord32be w1 >> putWord32be w2 >> putWord32be w3 
     get = liftM4 UUID getWord32be getWord32be getWord32be getWord32be
+
+instance S.Serialize UUID where
+    put (UUID w0 w1 w2 w3) =
+        S.putWord32be w0 >> S.putWord32be w1 >> S.putWord32be w2 >> S.putWord32be w3 
+    get = liftM4 UUID S.getWord32be S.getWord32be S.getWord32be S.getWord32be
+
 
 
 -- My goal with this instance was to make it work just enough to do what

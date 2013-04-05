@@ -28,6 +28,7 @@ module Data.UUID.Internal
 
 import Prelude hiding (null)
 
+import Control.DeepSeq
 import Control.Monad (liftM4)
 import Data.Char
 import Data.Maybe
@@ -315,6 +316,12 @@ instance Data UUID where
     toConstr uu  = mkConstr uuidType (show uu) [] (error "fixity")
     gunfold _ _  = error "gunfold"
     dataTypeOf _ = uuidType
+
+instance NFData UUID where
+  rnf (UUID a b c d) = rnf a `deepseq`
+                         rnf b `deepseq`
+                         rnf c `deepseq`
+                         rnf d `seq` ()
 
 uuidType :: DataType
 uuidType =  mkNoRepType "Data.UUID.UUID"
